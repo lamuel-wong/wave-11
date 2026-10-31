@@ -4,6 +4,7 @@ import { Navbar } from "./components/Navbar";
 import { products } from "./data/products";
 import { ProductSection } from "./components/ProductSection";
 import { Footer } from "./components/Footer";
+import { StatsBar } from "./components/StatsBar";
 
 const under20 = products.filter((product) => product.price < 20);
 const topRated = products.filter((product) => product.rating >= 4.5 && product.stock > 0);
@@ -15,6 +16,7 @@ function App() {
     <>
       <Navbar />
       <main className="min-h-screen bg-gray-50 p-8">
+        <StatsBar products={products}/>
         <ProductSection title="Deals under $20" products={under20}/>
         <ProductSection title="Top Rated" products={topRated}/>
         <ProductSection title="Furniture" products={furniture}/>
