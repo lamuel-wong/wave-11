@@ -3,16 +3,20 @@ import { ProductGrid } from "./ProductGrid";
 
 export const ProductSection = ({
   title,
+  count,
   products,
 }: {
   title: string;
+  count: number;
   products: Product[];
 }) => {
   const visibleProducts = products.slice(0, 4);
   const remainingProducts = products.length - visibleProducts.length;
   return (
     <section className="mb-12">
-      <h2 className="mt-1 text-2xl font-bold">{title}</h2>
+      <h2 className="mt-1 text-2xl font-bold">
+        {title} <span className="text-lg font-normal text-gray-500">({count})</span>
+      </h2>
       <ProductGrid products={visibleProducts} />
       {remainingProducts > 0 && (
         <div>
