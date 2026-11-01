@@ -2,13 +2,18 @@ import type { Product } from "../types/product";
 
 export const StatsBar = ({ products }: { products: Product[] }) => {
   const totalStock = products.reduce((acc, product) => acc + product.stock, 0);
+
   const totalInventoryValue = products.reduce(
     (acc, product) => acc + product.price * product.stock,
     0,
   );
+
   const averageRating =
-    products.reduce((acc, product) => acc + product.rating, 0) /
-    products.length;
+    products.length > 0
+      ? products.reduce((acc, product) => acc + product.rating, 0) /
+        products.length
+      : 0;
+
   const lowStockProducts = products.reduce(
     (acc, product) => (product.stock < 10 ? acc + 1 : acc),
     0,

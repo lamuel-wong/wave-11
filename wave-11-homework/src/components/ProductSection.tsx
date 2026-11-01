@@ -10,20 +10,17 @@ export const ProductSection = ({
   count: number;
   products: Product[];
 }) => {
-  const visibleProducts = products.slice(0, 4);
-  const remainingProducts = products.length - visibleProducts.length;
   return (
     <section className="mb-12">
       <h2 className="mt-1 text-2xl font-bold">
         {title} <span className="text-lg font-normal text-gray-500">({count})</span>
       </h2>
-      <ProductGrid products={visibleProducts} />
-      {remainingProducts > 0 && (
+      <ProductGrid products={products} />
+      {/* {products.length > 0 && (
         <div>
           <hr className="my-4 border-0 border-t border-dashed border-gray-300" />
-          <p className="text-center text-sm italic text-gray-400">... {remainingProducts} more products continue in this list</p>
         </div>
-      )}
+      )} */}
     </section>
   );
 };
