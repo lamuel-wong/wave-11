@@ -2,7 +2,7 @@ import type { Product } from "../types/product";
 
 export const ProductCard = ({ product }: { product: Product }) => {
   return (
-    <div className="w-full max-w-xs overflow-hidden rounded-xl my-4 border border-gray-200 bg-white shadow-sm">
+    <div className="w-full overflow-hidden rounded-xl my-4 border border-gray-200 bg-white shadow-sm">
       <div className="relative">
         <img
           className="aspect-square w-full bg-gray-100 object-contain"
