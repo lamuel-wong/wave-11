@@ -1,9 +1,25 @@
 import type { Product } from "../types/product";
 
-export const ProductCard = ({ product }: { product: Product }) => {
+export const ProductCard = ({
+  product,
+  isFavourite,
+  onToggleFavourites,
+}: {
+  product: Product;
+  isFavourite: boolean;
+  onToggleFavourites: (id: number) => void;
+}) => {
   return (
     <div className="w-full overflow-hidden rounded-xl my-4 border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
       <div className="relative">
+        <button
+          aria-label={`Favourite ${product.title}`}
+          aria-pressed={isFavourite}
+          className="text-red-500 flex items-center justify-center cursor-pointer rounded-full px-3 py-2 h-10 w-10 bg-white border border-gray-300 px-3 py-2 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:hover:bg-gray-700 absolute top-2 right-2"
+          onClick={() => onToggleFavourites(product.id)}
+        >
+          {isFavourite ? "♥" : "♡"}
+        </button>
         <img
           className="aspect-square w-full bg-gray-100 object-contain dark:bg-gray-700"
           src={product.thumbnail}
@@ -26,7 +42,9 @@ export const ProductCard = ({ product }: { product: Product }) => {
           <p className="text-lg font-bold text-green-700 dark:text-emerald-300">
             ${product.price.toFixed(2)}
           </p>
-          <p className="text-sm text-gray-600 dark:text-gray-300">★ {product.rating.toFixed(1)}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-300">
+            ★ {product.rating.toFixed(1)}
+          </p>
         </div>
       </div>
     </div>

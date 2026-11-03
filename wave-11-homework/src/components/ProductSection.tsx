@@ -5,10 +5,14 @@ export const ProductSection = ({
   title = "",
   count,
   products,
+  favouriteIds,
+  onToggleFavourites,
 }: {
   title?: string;
   count: number;
   products: Product[];
+  favouriteIds: number[];
+  onToggleFavourites: (id: number) => void;
 }) => {
   return (
     <section className="mb-12">
@@ -18,7 +22,11 @@ export const ProductSection = ({
           <span className="text-lg font-normal text-gray-500"> ({count})</span>
         </h2>
       )}
-      <ProductGrid products={products} />
+      <ProductGrid
+        products={products}
+        favouriteIds={favouriteIds}
+        onToggleFavourites={onToggleFavourites}
+      />
       {/* {products.length > 0 && (
         <div>
           <hr className="my-4 border-0 border-t border-dashed border-gray-300" />
