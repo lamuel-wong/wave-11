@@ -16,7 +16,7 @@ export const SearchBar = ({
       <div className="relative">
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 left-5 flex items-center text-xl"
+          className="pointer-events-none absolute mb-4 inset-y-0 left-5 flex items-center text-xl"
         >
           🔍
         </span>
@@ -26,16 +26,19 @@ export const SearchBar = ({
           placeholder="Search products..."
           value={search}
           onChange={(event) => onSearchChange(event.target.value)}
-          className="w-full rounded-2xl border-2 border-gray-300 bg-white py-4 pr-5 pl-12 text-lg text-gray-900 placeholder:text-gray-400 focus:border-emerald-800 focus:ring-4 focus:ring-emerald-100 focus:outline-none"
+          className="w-full rounded-2xl border-2 border-gray-300 bg-white mb-4 py-4 pr-5 pl-12 text-lg text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus:border-emerald-800 focus:ring-4 focus:ring-emerald-100 focus:outline-none dark:border-emerald-800 dark:bg-gray-800 dark:focus:ring-emerald-900"
         />
       </div>
-      <p className="mt-3 mb-6 text-sm text-gray-500">
+      {search.trim().length > 0 && (<>
+              <p className="mt-3 mb-6 text-sm text-gray-500">
         Showing {searchResult.length} of {products.length} products
       </p>
       <ProductSection
         count={searchResult.length}
         products={searchResult}
-      ></ProductSection>
+      ></ProductSection> </>
+      )}
+
     </>
   );
 };
