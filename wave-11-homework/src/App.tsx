@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Navbar } from "./components/Navbar";
+import { CartPanel } from "./components/CartPanel";
 import { products } from "./data/products";
 import type { CartItem } from "./types/cart";
 import { ProductSection } from "./components/ProductSection";
@@ -14,6 +15,7 @@ function App() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [favouriteIds, setFavouriteIds] = useState<number[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [cartPanelToggle, setCartPanelToggle] = useState<boolean>(false);
 
   const under20 = products.filter((product) => product.price < 20);
   const topRated = products.filter(
@@ -40,9 +42,7 @@ function App() {
       if (found.product.stock > found.quantity) {
         setCart(
           cart.map((item) =>
-            item.product.id === product.id
-              ? { ...item, quantity: item.quantity + 1 }
-              : item,
+            item === found ? { ...item, quantity: item.quantity + 1 } : item,
           ),
         );
       }
@@ -51,13 +51,35 @@ function App() {
     }
   };
 
+  const removeItem = (productId: number) => {
+    setCart(cart.filter((item) => item.product.id !== productId));
+  };
+
+  const deductItem = (productId: number) => {
+    const found = cart.find((item) => item.product.id === productId);
+    if (found) {
+      if (found.quantity > 1) {
+        setCart(
+          cart.map((item) =>
+            item === found ? { ...item, quantity: item.quantity - 1 } : item,
+          ),
+        );
+      } else {
+        removeItem(found.product.id);
+      }
+    }
+  };
+
+  const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+
   return (
     <div className={theme === "dark" ? "dark" : ""}>
       <Navbar
         theme={theme}
         setTheme={setTheme}
         favouriteCount={favouriteIds.length}
-        cartCount={cart.reduce((acc, item) => acc + item.quantity, 0)}
+        cartCount={cartCount}
+        onOpenCart={() => setCartPanelToggle(true)}
       />
       <main className="min-h-screen bg-gray-50 p-8 dark:bg-gray-900 dark:text-gray-100">
         <SearchBar
@@ -67,6 +89,16 @@ function App() {
           onToggleFavourites={onToggleFavourites}
           cart={cart}
           addToCart={addToCart}
+        />
+
+        <CartPanel
+        isCartOpen={cartPanelToggle}
+          onClose={() => setCartPanelToggle(false)}
+          cartCount={cartCount}
+          cart={cart}
+          addToCart={addToCart}
+          deductItem={deductItem}
+          removeItem={removeItem}
         />
 
         {search.trim().length === 0 && (
