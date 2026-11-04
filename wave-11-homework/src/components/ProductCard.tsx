@@ -4,11 +4,23 @@ export const ProductCard = ({
   product,
   isFavourite,
   onToggleFavourites,
+  cartQuantity,
+  addToCart,
 }: {
   product: Product;
   isFavourite: boolean;
   onToggleFavourites: (id: number) => void;
+  cartQuantity: number;
+  addToCart: (product: Product) => void;
 }) => {
+  let buttonLabel;
+  if (cartQuantity >= product.stock) {
+  buttonLabel = "Max in cart";
+} else if (cartQuantity > 0) {
+  buttonLabel = `Add to cart (${cartQuantity} in cart)`;
+} else {
+  buttonLabel = "Add to cart";
+}
   return (
     <div className="w-full overflow-hidden rounded-xl my-4 border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
       <div className="relative">
@@ -45,6 +57,16 @@ export const ProductCard = ({
           <p className="text-sm text-gray-600 dark:text-gray-300">
             ★ {product.rating.toFixed(1)}
           </p>
+        </div>
+        <div>
+          <button
+            type="button"
+            onClick={() => addToCart(product)}
+            disabled={cartQuantity >= product.stock}
+            className="mt-4 w-full cursor-pointer rounded-xl bg-emerald-800 px-4 py-3 text-sm font-bold text-white transition-colors enabled:hover:bg-emerald-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400 dark:bg-emerald-400 dark:text-gray-950 dark:enabled:hover:bg-emerald-300 dark:focus-visible:outline-emerald-300 dark:disabled:bg-gray-700 dark:disabled:text-gray-400"
+          >
+            {buttonLabel}
+          </button>
         </div>
       </div>
     </div>

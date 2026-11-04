@@ -2,15 +2,17 @@ export const Navbar = ({
   theme,
   setTheme,
   favouriteCount,
+  cartCount,
 }: {
   theme: ("light" | "dark");
   setTheme: (value: "light" | "dark") => void;
   favouriteCount: number;
-}) => {
+  cartCount: number;
+}) => { 
   const links = [
   { label: "Shop", href: "/" },
   { label: "Favorites", href: "/favorites", count: favouriteCount },
-  { label: "Cart", href: "/cart" },
+  { label: "Cart", href: "/cart", count: cartCount },
 ];
 
   return (

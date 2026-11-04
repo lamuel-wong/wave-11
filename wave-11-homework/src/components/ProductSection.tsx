@@ -1,5 +1,6 @@
 import type { Product } from "../types/product.ts";
 import { ProductGrid } from "./ProductGrid";
+import type { CartItem } from "../types/cart.ts";
 
 export const ProductSection = ({
   title = "",
@@ -7,12 +8,16 @@ export const ProductSection = ({
   products,
   favouriteIds,
   onToggleFavourites,
+  cart,
+  addToCart,
 }: {
   title?: string;
   count: number;
   products: Product[];
   favouriteIds: number[];
   onToggleFavourites: (id: number) => void;
+  cart: CartItem[];
+  addToCart: (product: Product) => void;
 }) => {
   return (
     <section className="mb-12">
@@ -26,6 +31,8 @@ export const ProductSection = ({
         products={products}
         favouriteIds={favouriteIds}
         onToggleFavourites={onToggleFavourites}
+        cart={cart}
+        addToCart={addToCart}
       />
       {/* {products.length > 0 && (
         <div>

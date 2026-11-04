@@ -1,16 +1,22 @@
 import { products } from "../data/products";
 import { ProductSection } from "./ProductSection";
+import type { Product } from "../types/product";
+import type { CartItem } from "../types/cart";
 
 export const SearchBar = ({
   search,
   onSearchChange,
   favouriteIds,
   onToggleFavourites,
+  cart,
+  addToCart,
 }: {
   search: string;
   onSearchChange: (value: string) => void;
   favouriteIds: number[];
   onToggleFavourites: (id: number) => void;
+  cart: CartItem[];
+  addToCart: (product: Product) => void;
 }) => {
   const searchResult = products.filter((product) =>
     product.title.toLowerCase().includes(search.toLowerCase()),
@@ -43,6 +49,8 @@ export const SearchBar = ({
             products={searchResult}
             favouriteIds={favouriteIds}
             onToggleFavourites={onToggleFavourites}
+            cart={cart}
+            addToCart={addToCart}
           ></ProductSection>{" "}
         </>
       )}
