@@ -9,6 +9,7 @@ import { StatsBar } from "./components/StatsBar";
 import { groupByCategory } from "./utils/groupByCategory";
 import { Footer } from "./components/Footer";
 import type { Product } from "./types/product";
+import { SuggestProductForm } from "./components/SuggestProductForm";
 
 function App() {
   const [search, setSearch] = useState("");
@@ -92,7 +93,7 @@ function App() {
         />
 
         <CartPanel
-        isCartOpen={cartPanelToggle}
+          isCartOpen={cartPanelToggle}
           onClose={() => setCartPanelToggle(false)}
           cartCount={cartCount}
           cart={cart}
@@ -164,6 +165,7 @@ function App() {
             )}
           </>
         )}
+        <SuggestProductForm />
       </main>
       <Footer companyName="SummitGear Market" />
     </div>
