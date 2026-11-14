@@ -36,39 +36,63 @@ function App() {
     );
   };
 
+  // const addToCart = (product: Product) => {
+  //   // Update cart if item exists, else add item
+  //   const found = cart.find((item) => item.product.id === product.id);
+  //   if (found) {
+  //     if (found.product.stock > found.quantity) {
+  //       setCart(
+  //         cart.map((item) =>
+  //           item === found ? { ...item, quantity: item.quantity + 1 } : item,
+  //         ),
+  //       );
+  //     }
+  //   } else if (product.stock > 0) {
+  //     setCart([...cart, { product, quantity: 1 }]);
+  //   }
+  // };
+
   const addToCart = (product: Product) => {
     // Update cart if item exists, else add item
-    const found = cart.find((item) => item.product.id === product.id);
-    if (found) {
-      if (found.product.stock > found.quantity) {
-        setCart(
-          cart.map((item) =>
-            item === found ? { ...item, quantity: item.quantity + 1 } : item,
-          ),
-        );
+    setCart((currentCart) => {
+      const found = currentCart.find((item) => item.product.id === product.id);
+
+      if (found) {
+        if (found.product.stock > found.quantity) {
+          return currentCart.map((item) =>
+            item.product.id === product.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item,
+          );
+        }
+      } else if (product.stock > 0) {
+        return [...currentCart, { product, quantity: 1 }];
       }
-    } else if (product.stock > 0) {
-      setCart([...cart, { product, quantity: 1 }]);
-    }
+      return currentCart;
+    });
   };
 
   const removeItem = (productId: number) => {
-    setCart(cart.filter((item) => item.product.id !== productId));
+    setCart((currentCart) => {
+      return currentCart.filter((item) => item.product.id !== productId);
+    });
   };
 
   const deductItem = (productId: number) => {
-    const found = cart.find((item) => item.product.id === productId);
-    if (found) {
-      if (found.quantity > 1) {
-        setCart(
-          cart.map((item) =>
-            item === found ? { ...item, quantity: item.quantity - 1 } : item,
-          ),
-        );
-      } else {
-        removeItem(found.product.id);
+    setCart((currentCart) => {
+      const found = currentCart.find((item) => item.product.id === productId);
+      if (!found) return currentCart;
+
+      if (found.quantity <= 1) {
+        return currentCart.filter((item) => item.product.id !== productId);
       }
-    }
+
+      return currentCart.map((item) =>
+        item.product.id === productId
+          ? { ...item, quantity: item.quantity - 1 }
+          : item,
+      );
+    });
   };
 
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
