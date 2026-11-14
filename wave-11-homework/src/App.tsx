@@ -1,18 +1,22 @@
-// This is your storefront. Each ticket adds a piece to it.
-// Start with tickets/day-1/1.1-product-type-and-card.md
+import { useState } from "react";
 import { Navbar } from "./components/Navbar";
+import { CartPanel } from "./components/CartPanel";
 import { products } from "./data/products";
+import type { CartItem } from "./types/cart";
 import { ProductSection } from "./components/ProductSection";
+import { SearchBar } from "./components/SearchBar";
 import { StatsBar } from "./components/StatsBar";
 import { groupByCategory } from "./utils/groupByCategory";
 import { Footer } from "./components/Footer";
-import { useState } from "react";
-import { SearchBar } from "./components/SearchBar";
+import type { Product } from "./types/product";
+import { SuggestProductForm } from "./components/SuggestProductForm";
 
 function App() {
   const [search, setSearch] = useState("");
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [favouriteIds, setFavouriteIds] = useState<number[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cartPanelToggle, setCartPanelToggle] = useState<boolean>(false);
 
   const under20 = products.filter((product) => product.price < 20);
   const topRated = products.filter(
@@ -25,10 +29,73 @@ function App() {
   const groupedProducts = groupByCategory(products);
 
   const onToggleFavourites = (id: number) => {
-    favouriteIds.includes(id)
-      ? setFavouriteIds(favouriteIds.filter((productId) => productId !== id))
-      : setFavouriteIds([...favouriteIds, id]);
+    setFavouriteIds(
+      favouriteIds.includes(id)
+        ? favouriteIds.filter((productId) => productId !== id)
+        : [...favouriteIds, id],
+    );
   };
+
+  // const addToCart = (product: Product) => {
+  //   // Update cart if item exists, else add item
+  //   const found = cart.find((item) => item.product.id === product.id);
+  //   if (found) {
+  //     if (found.product.stock > found.quantity) {
+  //       setCart(
+  //         cart.map((item) =>
+  //           item === found ? { ...item, quantity: item.quantity + 1 } : item,
+  //         ),
+  //       );
+  //     }
+  //   } else if (product.stock > 0) {
+  //     setCart([...cart, { product, quantity: 1 }]);
+  //   }
+  // };
+
+  const addToCart = (product: Product) => {
+    // Update cart if item exists, else add item
+    setCart((currentCart) => {
+      const found = currentCart.find((item) => item.product.id === product.id);
+
+      if (found) {
+        if (found.product.stock > found.quantity) {
+          return currentCart.map((item) =>
+            item.product.id === product.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item,
+          );
+        }
+      } else if (product.stock > 0) {
+        return [...currentCart, { product, quantity: 1 }];
+      }
+      return currentCart;
+    });
+  };
+
+  const removeItem = (productId: number) => {
+    setCart((currentCart) => {
+      return currentCart.filter((item) => item.product.id !== productId);
+    });
+  };
+
+  const deductItem = (productId: number) => {
+    setCart((currentCart) => {
+      const found = currentCart.find((item) => item.product.id === productId);
+      if (!found) return currentCart;
+
+      if (found.quantity <= 1) {
+        return currentCart.filter((item) => item.product.id !== productId);
+      }
+
+      return currentCart.map((item) =>
+        item.product.id === productId
+          ? { ...item, quantity: item.quantity - 1 }
+          : item,
+      );
+    });
+  };
+
+  const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
     <div className={theme === "dark" ? "dark" : ""}>
@@ -36,6 +103,8 @@ function App() {
         theme={theme}
         setTheme={setTheme}
         favouriteCount={favouriteIds.length}
+        cartCount={cartCount}
+        onOpenCart={() => setCartPanelToggle(true)}
       />
       <main className="min-h-screen bg-gray-50 p-8 dark:bg-gray-900 dark:text-gray-100">
         <SearchBar
@@ -43,6 +112,18 @@ function App() {
           onSearchChange={setSearch}
           favouriteIds={favouriteIds}
           onToggleFavourites={onToggleFavourites}
+          cart={cart}
+          addToCart={addToCart}
+        />
+
+        <CartPanel
+          isCartOpen={cartPanelToggle}
+          onClose={() => setCartPanelToggle(false)}
+          cartCount={cartCount}
+          cart={cart}
+          addToCart={addToCart}
+          deductItem={deductItem}
+          removeItem={removeItem}
         />
 
         {search.trim().length === 0 && (
@@ -55,6 +136,8 @@ function App() {
               count={under20.length}
               favouriteIds={favouriteIds}
               onToggleFavourites={onToggleFavourites}
+              cart={cart}
+              addToCart={addToCart}
             />
             <ProductSection
               title="Top Rated"
@@ -62,6 +145,8 @@ function App() {
               count={topRated.length}
               favouriteIds={favouriteIds}
               onToggleFavourites={onToggleFavourites}
+              cart={cart}
+              addToCart={addToCart}
             />
             <ProductSection
               title="Furniture"
@@ -69,6 +154,8 @@ function App() {
               count={furniture.length}
               favouriteIds={favouriteIds}
               onToggleFavourites={onToggleFavourites}
+              cart={cart}
+              addToCart={addToCart}
             />
             <ProductSection
               title="Luxury (over $5,000)"
@@ -76,6 +163,8 @@ function App() {
               count={luxury.length}
               favouriteIds={favouriteIds}
               onToggleFavourites={onToggleFavourites}
+              cart={cart}
+              addToCart={addToCart}
             />
 
             <h2 className="mt-1 text-2xl font-bold">Shop by Category</h2>
@@ -92,12 +181,15 @@ function App() {
                     count={categoryProducts.length}
                     favouriteIds={favouriteIds}
                     onToggleFavourites={onToggleFavourites}
+                    cart={cart}
+                    addToCart={addToCart}
                   />
                 );
               },
             )}
           </>
         )}
+        <SuggestProductForm />
       </main>
       <Footer companyName="SummitGear Market" />
     </div>
