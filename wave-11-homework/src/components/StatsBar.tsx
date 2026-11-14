@@ -21,7 +21,7 @@ export const StatsBar = ({ products }: { products: Product[] }) => {
 
   return (
     <div className="flex flex-col gap-4 mb-8 md:flex-row">
-      <div className="w-full overflow-hidden rounded-xl p-6 border border-gray-200 bg-white shadow-sm">
+      <div className="w-full overflow-hidden rounded-xl p-6 border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <h2 className="text-md text-gray-500 font-bold uppercase">
           Units in Stock
         </h2>
@@ -29,7 +29,7 @@ export const StatsBar = ({ products }: { products: Product[] }) => {
           {totalStock.toLocaleString("en-US")}
         </p>
       </div>
-      <div className="w-full overflow-hidden rounded-xl p-6 border border-gray-200 bg-white shadow-sm">
+      <div className="w-full overflow-hidden rounded-xl p-6 border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <h2 className="text-md text-gray-500 font-bold uppercase">
           Inventory Value
         </h2>
@@ -40,13 +40,13 @@ export const StatsBar = ({ products }: { products: Product[] }) => {
           })}
         </p>
       </div>
-      <div className="w-full overflow-hidden rounded-xl p-6 border border-gray-200 bg-white shadow-sm">
+      <div className="w-full overflow-hidden rounded-xl p-6 border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <h2 className="text-md text-gray-500 font-bold uppercase">
           Average Rating
         </h2>
         <p className="mt-1 text-2xl font-bold">★ {averageRating.toFixed(1)}</p>
       </div>
-      <div className="w-full overflow-hidden rounded-xl p-6 border border-gray-200 bg-white shadow-sm">
+      <div className="w-full overflow-hidden rounded-xl p-6 border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <h2 className="text-md text-gray-500 font-bold uppercase">Low Stock</h2>
         <p className="mt-1 text-2xl font-bold text-amber-700">
           {lowStockProducts} products
